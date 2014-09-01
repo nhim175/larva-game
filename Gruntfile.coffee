@@ -9,9 +9,9 @@ module.exports = (grunt)->
         options:
           transform: ['coffeeify']
 
-    uglify:
-      dist:
-        files: 'build/main.min.js': 'build/main.js'
+    # uglify:
+    #   dist:
+    #     files: 'build/main.min.js': 'build/main.js'
 
     watch:
       coffee:
@@ -28,9 +28,10 @@ module.exports = (grunt)->
       server:
         options:
           open: yes
-          port: 9001
+          port: 9003
 
     clean: dist: files: 'build'
 
-  grunt.registerTask 'build', ['clean', 'browserify', 'uglify']
+  # grunt.registerTask 'build', ['clean', 'browserify', 'uglify']
+  grunt.registerTask 'build', ['clean', 'browserify']
   grunt.registerTask 'default', ['build', 'connect', 'watch']
