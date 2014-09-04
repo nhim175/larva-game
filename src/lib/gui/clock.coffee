@@ -19,7 +19,8 @@ class GUIClock extends Module
     @me.x = @game.world.centerX
     @me.y = 50
     @timer = setInterval =>
-      @seconds++
+      unless @game.isOver
+        @seconds++
     , 1000
 
   getTime: ->
@@ -29,8 +30,15 @@ class GUIClock extends Module
     if seconds < 10 then seconds = '0' + seconds
     minutes + ':' + seconds
 
+  reset: ->
+    @seconds = 0
+
   update: ->
-    @time.text = @getTime()
-    @me.x = @game.world.centerX - @time.width/2
+    if not @game.isOver
+      @time.text = @getTime()
+      @me.x = @game.world.centerX - @time.width/2
+    else
+      @me.visible = false
+
 
 module.exports = GUIClock

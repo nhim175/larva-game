@@ -27,7 +27,6 @@ class GUIAxes extends Module
     @me.add @axe
     @me.x = @game.width - 64*3 - 50
     @me.y = 50
-    @debug @me
 
   onClickAxeEvent: =>
     if not @game.isUsingAxes and @axes > 0
@@ -41,5 +40,8 @@ class GUIAxes extends Module
   update: ->
     @score.text = '' + @axes
     @score.x = 123 - @score.width
+
+  reset: ->
+    @axes = 0
 
 module.exports = GUIAxes

@@ -16,20 +16,6 @@ class MenuState extends Module
   constructor: (game)->
 
   preload: ->
-    # Preload Stage
-    @game.stage = $.extend @game.stage, config.stage
-
-    # Preload all images
-    for imageName, image of config.images
-      @game.load.image imageName, image.src
-    
-    # Preload all spritesheets
-    for spriteName, sprite of config.sprites
-      @game.load.spritesheet spriteName, sprite.src, sprite.width, sprite.height, sprite.frames
-
-    # Preload all bitmap fonts
-    for fontName, font of config.bitmap_fonts
-      @game.load.bitmapFont fontName, font.src, font.map
 
   create: ->
 

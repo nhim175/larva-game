@@ -14,15 +14,16 @@ module.exports =
       src: 'assets/img/logo.png'
     start_btn:
       src: 'assets/img/start_btn.png'
+    exit_btn:
+      src: 'assets/img/exit_btn.png'
+    score_board:
+      src: 'assets/img/score_board.png'
+    game_over:
+      src: 'assets/img/game_over.png'
     axe:
       src: 'assets/img/axe.png'
 
   sprites:
-    bean: 
-    	src: 'assets/img/character.png'
-    	width: 64
-    	height: 108
-    	frames: 4
     red_duck:
       src: 'assets/img/red_duck.png'
       width: 64
@@ -38,6 +39,11 @@ module.exports =
       width: 64
       height: 96
       frames: 2
+
+  atlasXML:
+    bean:
+      src: 'assets/atlasXML/character.png'
+      xml: 'assets/atlasXML/character.xml'
 
   bitmap_fonts:
     '8bit_wonder':

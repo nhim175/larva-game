@@ -17,10 +17,11 @@ class Bean extends Module
   constructor: (game) ->
     @game = game
     @me = @game.add.sprite @game.world.width/2, 0, 'bean'
-    @me.animations.add 'leftwalk', [0], 6, yes
-    @me.animations.add 'leftstand', [1], 6, yes
-    @me.animations.add 'rightstand', [2], 6, yes
-    @me.animations.add 'rightwalk', [3], 6, yes
+    @me.animations.add 'leftwalk', ['1'], 6, yes
+    @me.animations.add 'leftstand', ['2'], 6, yes
+    @me.animations.add 'rightstand', ['3'], 6, yes
+    @me.animations.add 'rightwalk', ['4'], 6, yes
+    @me.animations.add 'die', ['5','6'], 30, no
     @me.animations.play 'rightstand'
     @me.direction = LEFT_DIRECTION
     @game.physics.enable @me, Phaser.Physics.ARCADE
@@ -45,6 +46,12 @@ class Bean extends Module
     @me.animations.play 'rightwalk'
     @me.direction = RIGHT_DIRECTION
 
+  die: ->
+    if not @isDead
+      @me.body.velocity.setTo 20, -350
+      @me.animations.play 'die'
+      @isDead = true
+
   update: ->
     leftKeyIsDown = @game.input.keyboard.isDown(Phaser.Keyboard.LEFT)
     rightKeyIsDown = @game.input.keyboard.isDown(Phaser.Keyboard.RIGHT)
@@ -52,12 +59,13 @@ class Bean extends Module
     touchOnLeftScreen = Math.floor(@game.input.activePointer.x/(@game.width/2)) is LEFT_DIRECTION
     touchOnRightScreen = Math.floor(@game.input.activePointer.x/(@game.width/2)) is RIGHT_DIRECTION
 
-    if leftKeyIsDown or (screenIsTouched and touchOnLeftScreen)
-      @moveLeft()
-    else if rightKeyIsDown or (screenIsTouched and touchOnRightScreen)
-      @moveRight()
-    else
-      if @me.direction is LEFT_DIRECTION then @standLeft() else @standRight()
+    if not @isDead
+      if leftKeyIsDown or (screenIsTouched and touchOnLeftScreen)
+        @moveLeft()
+      else if rightKeyIsDown or (screenIsTouched and touchOnRightScreen)
+        @moveRight()
+      else
+        if @me.direction is LEFT_DIRECTION then @standLeft() else @standRight()
 
 module.exports = Bean
 

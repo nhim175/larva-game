@@ -9,6 +9,8 @@ class Axe extends Module
 
   logPrefix: 'Axe'
 
+  lifeTime: 4000
+
   constructor: (game) ->
     @game = game
     @me = @game.add.sprite -100, -100, 'axe'
@@ -28,5 +30,11 @@ class Axe extends Module
 
   isTweening: ->
     @flyTween?.isRunning
+
+  disappear: ->
+    @me.visible = false
+
+  isVisible: ->
+    @me.visible
 
 module.exports = Axe
