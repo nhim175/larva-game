@@ -1,8 +1,12 @@
+# Copyright © 2013 All rights reserved
+# Author: nhim175@gmail.com
+
 config = require '../config.coffee'
 RedDuck = require '../red_duck.coffee'
 Platform = require '../platform.coffee'
 Logger = require '../../mixins/logger.coffee'
 Module = require '../module.coffee'
+Button = require '../button.coffee'
 
 LOGO_WIDTH = 368
 LOGO_HEIGHT = 144
@@ -29,14 +33,27 @@ class MenuState extends Module
     @platform = new Platform @game
     @redDuck = new RedDuck @game
 
+    @GUI = @game.add.group()
+
     @logo = @game.add.sprite @game.world.centerX, 168, 'logo'
     @logo.anchor.setTo 0.5, 0.5
     @game.add.tween(@logo).to {y: 200}, 1000, Phaser.Easing.Cubic.InOut, true, 0, Number.MAX_VALUE, true 
 
-    @startBtn = @game.add.sprite @game.world.centerX, 372, 'start_btn'
+    @startBtn = new Button @game, @game.world.centerX, 372, 'start_btn', @onStartBtnClickListener
     @startBtn.anchor.setTo 0.5, 0.5
-    @startBtn.inputEnabled = true
-    @startBtn.events.onInputDown.add @onStartBtnClickListener
+    
+    @GUI.add @logo
+    @GUI.add @startBtn
+
+    @debug @startBtn
+
+    # @startBtn = @game.add.sprite @game.world.centerX, 372, 'start_btn'
+    # @startBtn.anchor.setTo 0.5, 0.5
+    # @startBtn.inputEnabled = true
+    # @startBtn.events.onInputDown.add @onStartBtnClickListener
+
+    @introAudio = @game.add.audio 'intro', 1, true
+    @introAudio.play '', 0, 0.5, true
 
   onStartBtnClickListener: =>
     @debug 'start btn click listener'

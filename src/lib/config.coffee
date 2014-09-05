@@ -1,4 +1,13 @@
+# Copyright © 2013 All rights reserved
+# Author: nhim175@gmail.com
+
+API_URL = 'http://putainmedia.ngrok.com'
+MEDIA_URL = 'https://putainstatic.ngrok.com'
+
 module.exports =
+  upload_url: API_URL + '/file/public_upload',
+  media_url: MEDIA_URL
+
   width: 1136
   height: 640
 
@@ -15,7 +24,7 @@ module.exports =
     start_btn:
       src: 'assets/img/start_btn.png'
     exit_btn:
-      src: 'assets/img/exit_btn.png'
+      src: 'assets/img/share_btn.png'
     score_board:
       src: 'assets/img/score_board.png'
     game_over:
@@ -49,4 +58,12 @@ module.exports =
     '8bit_wonder':
       src: 'assets/font/8bit_wonder/font.png'
       map: 'assets/font/8bit_wonder/font.xml'
+
+  sounds:
+    intro: 
+      src: 'assets/sound/intro.ogg'
+    click:
+      src: 'assets/sound/click.ogg'
+    pickup:
+      src: 'assets/sound/pickup.ogg'
 

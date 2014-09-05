@@ -7,6 +7,7 @@ Platform = require '../platform.coffee'
 Cloud = require '../cloud.coffee'
 Axe = require '../axe.coffee'
 Module = require '../module.coffee'
+Button = require '../button.coffee'
 
 GUIAxes = require '../gui/axes.coffee'
 GUIClock = require '../gui/clock.coffee'
@@ -65,24 +66,18 @@ class PlayState extends Module
     @resultInTween = @game.tweens.create(@result).to {y: @game.world.centerY - 60}, 1000, Phaser.Easing.Cubic.Out
     @resultOutTween = @game.tweens.create(@result).to {y: -100}, 1000, Phaser.Easing.Cubic.Out
 
-    @startBtn = new Phaser.Sprite @game, -200, 450, 'start_btn'
+    @startBtn = new Button @game, -200, 450, 'start_btn', @onStartBtnClickListener
     @startBtn.anchor.setTo 1, 0
-    @startBtn.inputEnabled = true
-    @startBtn.events.onInputDown.add @onStartBtnClickListener
     @startBtnInTween = @game.tweens.create(@startBtn).to {x: @game.world.centerX - 20}, 1000, Phaser.Easing.Cubic.Out 
-    @startBtnOutTween = @game.tweens.create(@startBtn).to {x: -200 }, 1000, Phaser.Easing.Cubic.Out 
 
-    @exitBtn = new Phaser.Sprite @game, @game.width + 200, 450, 'exit_btn'
-    @exitBtn.inputEnabled = true
-    @exitBtn.events.onInputDown.add @onExitBtnClickListener
-    @exitBtnInTween = @game.tweens.create(@exitBtn).to {x: @game.world.centerX + 20}, 1000, Phaser.Easing.Cubic.Out 
-    @exitBtnOutTween = @game.tweens.create(@exitBtn).to {x: @game.width + 200 }, 1000, Phaser.Easing.Cubic.Out 
+    @shareBtn = new Button @game, @game.width + 200, 450, 'exit_btn', @onShareBtnClickListener
+    @shareBtnInTween = @game.tweens.create(@shareBtn).to {x: @game.world.centerX + 20}, 1000, Phaser.Easing.Cubic.Out 
 
     @GUIGameOver.z = 100
     @GUIGameOver.add @gameOverText
     @GUIGameOver.add @scoreBoard
     @GUIGameOver.add @startBtn
-    @GUIGameOver.add @exitBtn
+    @GUIGameOver.add @shareBtn
     @GUIGameOver.add @result
 
   reset: ->
@@ -93,9 +88,9 @@ class PlayState extends Module
     @reset()
     @game.state.restart 'play'
 
-  onExitBtnClickListener: =>
-    @reset()
-    @game.state.start 'menu'
+  onShareBtnClickListener: =>
+    @share_result()
+    #@game.state.start 'menu'
 
   addDuck: ->
     if Math.random() > 0.5
@@ -135,26 +130,40 @@ class PlayState extends Module
     @gameOverTextInTween.start()
     @scoreBoardInTween.start()
     @startBtnInTween.start()
-    @exitBtnInTween.start()
+    @shareBtnInTween.start()
     @resultInTween.start()
     clearInterval @duckInterval
     clearInterval @cloudInterval
     @game.isOver = true
 
-  update: ->
-      @bean.update()
-      @GUIAxes.update()
-      @GUIClock.update()
-      @game.physics.arcade.collide @bean.me, @platform.me
-      @game.physics.arcade.collide @axe.me, @platform.me
-      for duck in @enemies
-        duck.update()
-        @game.physics.arcade.collide duck.me, @platform.me
-        if @bean.me.overlap duck.me
-          @bean.die()
-          @gameOver()
+  share_result: ->
+    $.post config.upload_url, {data: @game.canvas.toDataURL()}, (data) =>
+      @debug data
+      url = config.media_url + '/?result=' + data.file
+      @debug url
+      FB.ui
+        method: 'share',
+        href: url
+        , (response) ->
+          if response && !response.error_code
+            alert 'Posting completed.'
+          else
+            alert 'Error while posting.'
 
-      if @axe.isVisible() and not @axe.isTweening() and @bean.me.overlap @axe.me
-        @bean_eat_axe()
+  update: ->
+    @bean.update()
+    @GUIAxes.update()
+    @GUIClock.update()
+    @game.physics.arcade.collide @bean.me, @platform.me
+    @game.physics.arcade.collide @axe.me, @platform.me
+    for duck in @enemies
+      duck.update()
+      @game.physics.arcade.collide duck.me, @platform.me
+      if @bean.me.overlap duck.me
+        @bean.die()
+        @gameOver()
+
+    if @axe.isVisible() and not @axe.isTweening() and @bean.me.overlap @axe.me
+      @bean_eat_axe()
 
 module.exports = PlayState

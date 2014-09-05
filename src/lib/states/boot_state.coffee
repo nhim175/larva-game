@@ -1,3 +1,6 @@
+# Copyright © 2013 All rights reserved
+# Author: nhim175@gmail.com
+
 config = require '../config.coffee'
 Logger = require '../../mixins/logger.coffee'
 Module = require '../module.coffee'
@@ -28,6 +31,10 @@ class BootState extends Module
     # Preload all atlasXML sprites
     for atlasName, atlas of config.atlasXML
       @game.load.atlasXML atlasName, atlas.src, atlas.xml
+
+    # Preload all sounds
+    for soundName, sound of config.sounds
+      @game.load.audio soundName, sound.src
 
   create: ->
     @game.state.start 'menu'

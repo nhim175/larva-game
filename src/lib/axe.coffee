@@ -14,6 +14,7 @@ class Axe extends Module
   constructor: (game) ->
     @game = game
     @me = @game.add.sprite -100, -100, 'axe'
+    @pickupSound = new Phaser.Sound @game, 'pickup', 1
 
   dropFrom: (x,y) ->
     @game.physics.enable @me, Phaser.Physics.ARCADE
@@ -23,6 +24,7 @@ class Axe extends Module
     @me.body.gravity.set 0, 480
 
   flyTo: (x,y, callback) ->
+    @pickupSound.play()
     @me.body.gravity.set 0, 0
     @flyTween = @game.tweens.create(@me).to {x: x, y: y }, 1000, Phaser.Easing.Cubic.Out
     @flyTween.start()
