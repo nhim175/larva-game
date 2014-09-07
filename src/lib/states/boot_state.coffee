@@ -17,26 +17,10 @@ class BootState extends Module
     @game.stage = $.extend @game.stage, config.stage
 
     # Preload all images
-    for imageName, image of config.images
+    for imageName, image of config.boot.images
       @game.load.image imageName, image.src
-    
-    # Preload all spritesheets
-    for spriteName, sprite of config.sprites
-      @game.load.spritesheet spriteName, sprite.src, sprite.width, sprite.height, sprite.frames
-
-    # Preload all bitmap fonts
-    for fontName, font of config.bitmap_fonts
-      @game.load.bitmapFont fontName, font.src, font.map
-
-    # Preload all atlasXML sprites
-    for atlasName, atlas of config.atlasXML
-      @game.load.atlasXML atlasName, atlas.src, atlas.xml
-
-    # Preload all sounds
-    for soundName, sound of config.sounds
-      @game.load.audio soundName, sound.src
 
   create: ->
-    @game.state.start 'menu'
+    @game.state.start 'load'
 
 module.exports = BootState

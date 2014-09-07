@@ -41,19 +41,22 @@ class MenuState extends Module
 
     @startBtn = new Button @game, @game.world.centerX, 372, 'start_btn', @onStartBtnClickListener
     @startBtn.anchor.setTo 0.5, 0.5
-    
+
     @GUI.add @logo
     @GUI.add @startBtn
 
     @debug @startBtn
 
-    # @startBtn = @game.add.sprite @game.world.centerX, 372, 'start_btn'
-    # @startBtn.anchor.setTo 0.5, 0.5
-    # @startBtn.inputEnabled = true
-    # @startBtn.events.onInputDown.add @onStartBtnClickListener
-
     @introAudio = @game.add.audio 'intro', 1, true
     @introAudio.play '', 0, 0.5, true
+
+    if cordova?
+      @_introAudio = new Media config.sounds.intro.src_mp3, null, null, @onMediaStatusChange
+      @_introAudio.play()
+
+  onMediaStatusChange: (status) =>
+    if status is Media.MEDIA_STOPPED
+      @_introAudio.play()
 
   onStartBtnClickListener: =>
     @debug 'start btn click listener'

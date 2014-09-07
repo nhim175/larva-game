@@ -1,5 +1,6 @@
 # Copyright © 2013 All rights reserved
 # Author: nhim175@gmail.com
+config = require './config.coffee'
 
 Module = require './module.coffee'
 Logger = require '../mixins/logger.coffee'
@@ -15,6 +16,8 @@ class Axe extends Module
     @game = game
     @me = @game.add.sprite -100, -100, 'axe'
     @pickupSound = new Phaser.Sound @game, 'pickup', 1
+    if cordova?
+      @_pickupSound = new Media config.sounds.pickup.src_mp3
 
   dropFrom: (x,y) ->
     @game.physics.enable @me, Phaser.Physics.ARCADE
@@ -25,6 +28,8 @@ class Axe extends Module
 
   flyTo: (x,y, callback) ->
     @pickupSound.play()
+    if cordova?
+      @_pickupSound.play()
     @me.body.gravity.set 0, 0
     @flyTween = @game.tweens.create(@me).to {x: x, y: y }, 1000, Phaser.Easing.Cubic.Out
     @flyTween.start()

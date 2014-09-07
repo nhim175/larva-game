@@ -12,7 +12,12 @@ module.exports =
   height: 640
 
   stage:
-    backgroundColor: 0x222222
+    backgroundColor: 0x000000
+
+  boot:
+    images:
+      loading:
+        src: 'assets/img/loading.png'
 
   images:
     background:
@@ -62,8 +67,11 @@ module.exports =
   sounds:
     intro: 
       src: 'assets/sound/intro.ogg'
+      src_mp3: 'assets/sound/intro.mp3'
     click:
       src: 'assets/sound/click.ogg'
+      src_mp3: 'assets/sound/click.mp3'
     pickup:
       src: 'assets/sound/pickup.ogg'
+      src_mp3: 'assets/sound/pickup.mp3'
 
