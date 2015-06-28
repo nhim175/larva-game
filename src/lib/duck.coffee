@@ -4,7 +4,7 @@
 Module = require './module.coffee'
 Logger = require '../mixins/logger.coffee'
 
-WIDTH = 64
+WIDTH = 79
 HEIGHT = 96
 LEFT_DIRECTION = 0
 RIGHT_DIRECTION = 1

@@ -39,17 +39,17 @@ module.exports =
 
   sprites:
     red_duck:
-      src: 'assets/img/red_duck.png'
-      width: 64
+      src: 'assets/img/enemy1.png'
+      width: 79
       height: 96
       frames: 5
     green_duck:
-      src: 'assets/img/green_duck.png'
-      width: 64
+      src: 'assets/img/enemy2.png'
+      width: 79
       height: 96
       frames: 5
     cloud:
-      src: 'assets/img/cloud.png'
+      src: 'assets/img/cloud2.png'
       width: 64
       height: 96
       frames: 2
