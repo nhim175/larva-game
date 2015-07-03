@@ -29,7 +29,7 @@ class GUIAxes extends Module
     @me.y = 50
 
   onClickAxeEvent: =>
-    if not @game.isUsingAxes and @axes > 0
+    if not @game.isUsingAxes and @axes > 0 and !@game.isOver
       @debug 'use AXE'
       @axes--
       @game.isUsingAxes = true
