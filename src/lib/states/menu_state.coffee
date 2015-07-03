@@ -50,9 +50,8 @@ class MenuState extends Module
     @introAudio = @game.add.audio 'intro', 1, true
     @introAudio.play '', 0, 0.5, true
 
-    if cordova?
-      @_introAudio = new Media config.sounds.intro.src_mp3, null, null, @onMediaStatusChange
-      @_introAudio.play()
+    if window.plugins?.NativeAudio
+      window.plugins.NativeAudio.loop('intro')
 
   onMediaStatusChange: (status) =>
     if status is Media.MEDIA_STOPPED

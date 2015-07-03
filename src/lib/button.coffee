@@ -7,12 +7,10 @@ class Button extends Phaser.Button
   constructor: (game, x, y, key, callback) ->
     super(game, x, y, key, callback)
     @onDownSound = new Phaser.Sound game, 'click', 1
-    if cordova?
-      @onInputUp.add @onInputUpListener
-      @onDownSound = new Media config.sounds.click.src_mp3
-
+    @onInputUp.add @onInputUpListener
+    
   onInputUpListener: =>
-    if cordova?
-      @onDownSound.play()
+    if window.plugins?.NativeAudio
+      window.plugins.NativeAudio.play('click')
 
 module.exports = Button

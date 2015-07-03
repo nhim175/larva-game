@@ -37,6 +37,23 @@ class LoadState extends Module
     for soundName, sound of config.sounds
       @game.load.audio soundName, sound.src
 
+      if window.plugins?.NativeAudio
+        if soundName is 'intro'
+          window.plugins.NativeAudio.preloadComplex(soundName, sound.src_mp3, 2.5, 1, 0
+            , (msg) ->
+              console.log("Finish loading #{soundName}")
+            , (msg) ->
+              console.log(msg)
+          )
+        else
+          window.plugins.NativeAudio.preloadSimple(soundName, sound.src_mp3
+            , (msg) ->
+              console.log(msg)
+            , (error) ->
+              console.log(error)
+          )
+
+
   create: ->
     @game.state.start 'menu'
 
