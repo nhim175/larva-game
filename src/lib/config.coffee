@@ -36,6 +36,8 @@ module.exports =
       src: 'assets/img/game_over.png'
     axe:
       src: 'assets/img/axe.png'
+    pause_btn:
+      src: 'assets/img/pause_button.png'
 
   sprites:
     red_duck:

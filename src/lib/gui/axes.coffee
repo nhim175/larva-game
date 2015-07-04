@@ -28,11 +28,16 @@ class GUIAxes extends Module
     @me.x = @game.width - 64*3 - 50
     @me.y = 50
 
+    $(@game).on 'GameOverEvent', @onGameOver
+
   onClickAxeEvent: =>
     if not @game.isUsingAxes and @axes > 0 and !@game.isOver
       @debug 'use AXE'
       @axes--
       @game.isUsingAxes = true
+
+  onGameOver: =>
+    @game.isUsingAxes = false
 
   addAxe: ->
     @axes++

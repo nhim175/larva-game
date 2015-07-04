@@ -11,6 +11,7 @@ Button = require '../button.coffee'
 
 GUIAxes = require '../gui/axes.coffee'
 GUIClock = require '../gui/clock.coffee'
+GUIPauseButton = require '../gui/pause_btn.coffee'
 
 class PlayState extends Module
   @include Logger
@@ -44,8 +45,13 @@ class PlayState extends Module
 
     $(@cloud).on 'ShootEvent', @handle_cloud_shoot_event
 
-    @duckInterval = setInterval (=> @addDuck()), 5000
-    @cloudInterval = setInterval (=> @cloud.reset()), 10000
+    @duckTimer = @game.time.create(false)
+    @duckTimer.loop 5000, (=> @addDuck()), @
+    @duckTimer.start()
+
+    @cloudTimer = @game.time.create(false) 
+    @cloudTimer.loop 10000, (=> @cloud.reset()), @
+    @cloudTimer.start()
 
     # set GUI
     @GUIAxes = new GUIAxes @game
@@ -80,6 +86,14 @@ class PlayState extends Module
     @GUIGameOver.add @shareBtn
     @GUIGameOver.add @result
 
+    pause_btn = new GUIPauseButton @game
+
+    $('.resume-btn').on 'click', @onResumeBtnClicked
+
+  onResumeBtnClicked: =>
+    @game.paused = false
+    $('body').removeClass 'paused'
+
   reset: ->
     @GUIClock.reset()
     @game.isOver = false
@@ -90,9 +104,9 @@ class PlayState extends Module
 
   onShareBtnClickListener: =>
     @share_result()
-    #@game.state.start 'menu'
 
   addDuck: ->
+    return if @game.paused
     if Math.random() > 0.5
       duck = new GreenDuck @game
     else
@@ -114,13 +128,13 @@ class PlayState extends Module
     @debug 'handling cloud shoot event'
     @axe = new Axe @game
     @axe.dropFrom @cloud.me.x, @cloud.me.y
-    @axeTimeout = setTimeout =>
-      @axe.disappear()
-    , @axe.lifeTime
+    @axeTimeout = @game.time.create(true)
+    @axeTimeout.add @axe.lifeTime, (=> @axe.disappear()), @
+    @axeTimeout.start()
 
   bean_eat_axe: ->
     @debug 'bean ate an axe'
-    clearTimeout @axeTimeout
+    @axeTimeout.destroy()
     @axe.flyTo @GUIAxes.axe.getBounds().x, @GUIAxes.axe.getBounds().y, =>
       @GUIAxes.addAxe()
       @axe.me.destroy()
@@ -132,9 +146,10 @@ class PlayState extends Module
     @startBtnInTween.start()
     @shareBtnInTween.start()
     @resultInTween.start()
-    clearInterval @duckInterval
-    clearInterval @cloudInterval
+    @duckTimer.destroy()
+    @cloudTimer.destroy()
     @game.isOver = true
+    $(@game).trigger 'GameOverEvent'
 
   share_result: ->
     $.post config.upload_url, {data: @game.canvas.toDataURL()}, (data) =>

@@ -13,7 +13,30 @@
   <script src="assets/vendor/phaser/build/phaser.min.js"></script>
   <script src="build/main.js"></script>
   <script type="text/javascript" src="cordova.js"></script>
+  <style type="text/css">
+  .resume-btn {
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    width: 106px;
+    height: 46px;
+    margin-left: -53px;
+    margin-top: -23px;
+    z-index: 1;
+    -webkit-transition: all 0.3s;
+    -webkit-transform: translateY(500px);
+  }
+
+  .paused .resume-btn {
+    -webkit-transform: translateY(0px); 
+  }
+
+  .paused canvas {
+    -webkit-filter: blur(1px) saturate(0.5);
+  }
+  </style>
 </head>
 <body>
+<img class="resume-btn" src="assets/img/start_btn.png"/>
 </body>
 </html>

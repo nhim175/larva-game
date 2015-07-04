@@ -28,9 +28,13 @@ class Cloud extends Module
   start: ->
     @me.animations.play 'fly'
     @runTween.start()
-    setTimeout =>
-      @me.animations.play 'shoot'
-      $(@).trigger 'ShootEvent'
-    , Math.random()*@flyingTime
+
+    axeTimer = @game.time.create(true)
+    axeTimer.add Math.random()*@flyingTime, (=> @shoot()), @
+    axeTimer.start()
+
+  shoot: ->
+    @me.animations.play 'shoot'
+    $(@).trigger 'ShootEvent'
 
 module.exports = Cloud
