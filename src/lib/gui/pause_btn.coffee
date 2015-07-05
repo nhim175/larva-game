@@ -12,8 +12,6 @@ class GUIPauseButton extends Button
   onClick: =>
     console.log 'pause btn clicked'
     return if @game.isOver
-    @game.paused = !@game.paused
     $(@game).trigger 'PausedEvent'
-    $('body').addClass('paused')
 
 module.exports = GUIPauseButton

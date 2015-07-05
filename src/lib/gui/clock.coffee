@@ -18,10 +18,13 @@ class GUIClock extends Module
     @me.add @time
     @me.x = @game.world.centerX
     @me.y = 50
-    @timer = setInterval =>
-      unless @game.isOver
-        @seconds++
-    , 1000
+    @timer = @game.time.create(false)
+    @timer.loop 1000, @updateTime, @
+    @timer.start()
+
+  updateTime: =>
+    unless @game.isOver
+      @seconds++
 
   getTime: ->
     minutes = Math.floor @seconds/60
@@ -29,6 +32,8 @@ class GUIClock extends Module
     if minutes < 10 then minutes = '0' + minutes
     if seconds < 10 then seconds = '0' + seconds
     minutes + ':' + seconds
+
+  getSeconds: -> @seconds
 
   reset: ->
     @seconds = 0

@@ -89,6 +89,8 @@ class PlayState extends Module
     pause_btn = new GUIPauseButton @game
 
     $('.resume-btn').on 'click', @onResumeBtnClicked
+    $(@game).on 'PausedEvent', @pause_game
+    document.addEventListener 'pause', @pause_game, false
 
   onResumeBtnClicked: =>
     @game.paused = false
@@ -152,18 +154,35 @@ class PlayState extends Module
     $(@game).trigger 'GameOverEvent'
 
   share_result: ->
-    $.post config.upload_url, {data: @game.canvas.toDataURL()}, (data) =>
-      @debug data
-      url = config.media_url + '/?result=' + data.file
-      @debug url
-      FB.ui
-        method: 'share',
-        href: url
-        , (response) ->
-          if response && !response.error_code
-            alert 'Posting completed.'
-          else
-            alert 'Error while posting.'
+    facebookConnectPlugin.getLoginStatus (response) =>
+      @debug 'login status', response
+      if response.status is 'connected'
+        @debug 'logged in'
+        facebookConnectPlugin.api 'me', [], (response) =>
+          @debug 'me', response
+
+          name = response.name
+
+          $.post 'http://larvafun.com/upload.php', {data: @game.canvas.toDataURL()}, (data) =>
+            @debug data
+            url = 'http://larvafun.com/' + data.url
+
+            facebookConnectPlugin.showDialog
+              method: 'feed'
+              link: 'http://larvafun.com'
+              picture: url
+              name: name + ' survived for ' + @GUIClock.getSeconds() + ' seconds.' #'Test Post'
+              caption: 'Posted from the LarvaGame.'
+              description: 'Visit http://larvafun.com for more information.'
+            , (response) =>
+              @debug response
+            , (response) =>
+              @debug response
+      else
+        facebookConnectPlugin.login ["public_profile"], (response) =>
+          @debug response
+        , (response) =>
+          @debug 'failed', response
 
   update: ->
     @bean.update()
@@ -180,5 +199,10 @@ class PlayState extends Module
 
     if @axe.isVisible() and not @axe.isTweening() and @bean.me.overlap @axe.me
       @bean_eat_axe()
+
+  pause_game: =>
+    return if @game.isOver or @game.paused
+    @game.paused = !@game.paused
+    $('body').addClass('paused')
 
 module.exports = PlayState

@@ -8,19 +8,21 @@ BootState = require './lib/states/boot_state.coffee'
 config = require './lib/config.coffee'
 
 init = ->
+
   window.fbAsyncInit = ->
     FB.init
       appId      : '752923004768642',
       xfbml      : true,
       version    : 'v2.0'
 
+    if !cordova?
+      window.facebookConnectPlugin = FB
+
     game = new Phaser.Game config.width, config.height, Phaser.CANVAS
     game.state.add 'boot', BootState, yes
     game.state.add 'load', LoadState
     game.state.add 'menu', MenuState
     game.state.add 'play', PlayState
-
-    console.log game
 
   ((d, s, id) ->
     fjs = d.getElementsByTagName(s)[0]

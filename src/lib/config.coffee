@@ -25,7 +25,7 @@ module.exports =
     ground:
       src: 'assets/img/ground.png'
     logo:
-      src: 'assets/img/logo.png'
+      src: 'assets/img/logo2.png'
     start_btn:
       src: 'assets/img/start_btn.png'
     exit_btn:
@@ -33,7 +33,7 @@ module.exports =
     score_board:
       src: 'assets/img/score_board.png'
     game_over:
-      src: 'assets/img/game_over.png'
+      src: 'assets/img/game_over2.png'
     axe:
       src: 'assets/img/axe.png'
     pause_btn:
