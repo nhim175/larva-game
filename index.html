@@ -11,8 +11,9 @@
   <script src="//localhost:1337/livereload.js"></script>
   <script src="assets/vendor/jquery/dist/jquery.min.js"></script>
   <script src="assets/vendor/phaser/build/phaser.min.js"></script>
-  <script src="build/main.js"></script>
   <script type="text/javascript" src="cordova.js"></script>
+  <script src="build/main.js"></script>
+  
   <style type="text/css">
   .resume-btn {
     position: fixed;
@@ -33,6 +34,11 @@
 
   .paused canvas {
     -webkit-filter: saturate(0);
+  }
+
+  canvas {
+    max-height: 100%;
+    max-width: 100%;
   }
   </style>
 </head>

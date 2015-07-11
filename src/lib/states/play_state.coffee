@@ -24,9 +24,6 @@ class PlayState extends Module
 
   create: ->
 
-    @game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
-    @game.scale.setScreenSize true
-
     @game.physics.startSystem Phaser.Physics.ARCADE
 
     # set background

@@ -23,7 +23,7 @@ class MenuState extends Module
 
   create: ->
 
-    @game.scale.scaleMode = Phaser.ScaleManager.SHOW_ALL
+    @game.scale.scaleMode = Phaser.ScaleManager.EXACT_FIT
     @game.scale.setScreenSize true
 
     @game.physics.startSystem Phaser.Physics.ARCADE
