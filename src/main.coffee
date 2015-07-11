@@ -7,6 +7,8 @@ LoadState = require './lib/states/load_state.coffee'
 BootState = require './lib/states/boot_state.coffee'
 config = require './lib/config.coffee'
 
+APP_VERSION = '1.0'
+
 init = ->
 
   # select the right Ad Id according to platform
@@ -23,13 +25,21 @@ init = ->
     if screen.width/screen.height == 1.5 #iphone 4 & 4S
       adHeight = 100
 
-  if AdMob?
-    AdMob.createBanner
-      adId: admobid.banner
-      adSize: 'SMART_BANNER'
-      position: AdMob.AD_POSITION.BOTTOM_CENTER
-      overlap:true
-      autoShow: true
+  updateCallback = (data) ->
+    if /(ipod|iphone|ipad)/i.test(navigator.userAgent)
+      cordova?.exec null, null, 'Browser', 'open', [data.ios_url]
+
+  $.post 'http://larvafun.com/info.php', (data) ->
+    if data.version isnt APP_VERSION
+      navigator.notification?.alert "Thank you for playing LarvaGame. There's an update available.", ( -> updateCallback(data)), "Update available", "Update now"
+
+    if AdMob? and data.ads is true
+      AdMob.createBanner
+        adId: admobid.banner
+        adSize: 'SMART_BANNER'
+        position: AdMob.AD_POSITION.BOTTOM_CENTER
+        overlap:true
+        autoShow: true
 
   makeGame = ->
     game = new Phaser.Game config.width, config.height, Phaser.CANVAS
