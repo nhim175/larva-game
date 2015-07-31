@@ -76,4 +76,14 @@ module.exports =
     pickup:
       src: 'assets/sound/pickup.ogg'
       src_mp3: 'assets/sound/pickup.mp3'
+    chicken_die:
+      src: 'assets/sound/chicken.ogg'
+      src_mp3: 'assets/sound/chicken.mp3'
+    double_kill:
+      src: 'assets/sound/double_kill.ogg'
+      src_mp3: 'assets/sound/double_kill.mp3'
+    triple_kill:
+      src: 'assets/sound/triple_kill.ogg'
+      src_mp3: 'assets/sound/triple_kill.mp3'
+
 

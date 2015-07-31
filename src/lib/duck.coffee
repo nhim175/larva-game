@@ -31,7 +31,13 @@ class GreenDuck extends Module
     @me.body.bounce.set 1
     @me.body.gravity.set 0, 280
 
+    @dieSound = new Phaser.Sound @game, 'chicken_die', 1
+
   kill: ->
+    if window.plugins?.NativeAudio
+      window.plugins.NativeAudio.play 'chicken_die'
+    else
+      @dieSound.play()
     @me.animations.play 'die'
     @me.body.collideWorldBounds = false
     @me.body.velocity.setTo 0, 350

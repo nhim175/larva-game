@@ -8,6 +8,7 @@ Cloud = require '../cloud.coffee'
 Axe = require '../axe.coffee'
 Module = require '../module.coffee'
 Button = require '../button.coffee'
+Util = require '../util/util.coffee'
 
 GUIAxes = require '../gui/axes.coffee'
 GUIClock = require '../gui/clock.coffee'
@@ -83,6 +84,9 @@ class PlayState extends Module
     @GUIGameOver.add @shareBtn
     @GUIGameOver.add @result
 
+    @dblKillSound = new Phaser.Sound @game, 'double_kill', 1
+    @tripleKillSound = new Phaser.Sound @game, 'triple_kill', 1
+
     pause_btn = new GUIPauseButton @game
 
     $('.resume-btn').on 'click', @onResumeBtnClicked
@@ -118,9 +122,33 @@ class PlayState extends Module
 
   handleDuckClickEvent: (duck) ->
     if @game.isUsingAxes
-      @debug 'killing a duck'
-      duck.kill()
-      @enemies.splice @enemies.indexOf(duck), 1
+      x = @game.input.position.x
+      y = @game.input.position.y
+
+      # kill ducks
+      i = @enemies.length
+      killed = 0
+      while i--
+        duck = @enemies[i]
+        if Phaser.Rectangle.contains duck.me.body, x, y
+          killed += 1
+          duck.kill()
+          @enemies.splice @enemies.indexOf(duck), 1
+
+      if killed is 2
+        setTimeout =>
+          if window.plugins?.NativeAudio
+            window.plugins.NativeAudio.play('double_kill')
+          else
+            @dblKillSound.play()
+        , 100
+      else if killed is 3
+        setTimeout =>
+          if window.plugins?.NativeAudio
+            window.plugins.NativeAudio.play('triple_kill')
+          else
+            @tripleKillSound.play()
+        , 100
       @game.isUsingAxes = false
 
   handle_cloud_shoot_event: =>
@@ -160,21 +188,23 @@ class PlayState extends Module
 
           name = response.name
 
-          $.post 'http://larvafun.com/upload.php', {data: @game.canvas.toDataURL()}, (data) =>
-            @debug data
-            url = 'http://larvafun.com/' + data.url
+          Util.resize @game.canvas.toDataURL(), 568, 320, (resizedDataURL) =>
+            $.post 'http://larvafun.com/upload.php', {data: resizedDataURL}, (data) =>
+              @debug data
+              url = 'http://larvafun.com/' + data.url
 
-            facebookConnectPlugin.showDialog
-              method: 'feed'
-              link: 'http://larvafun.com'
-              picture: url
-              name: name + ' survived for ' + @GUIClock.getSeconds() + ' seconds.' #'Test Post'
-              caption: 'Posted from the LarvaGame.'
-              description: 'Visit http://larvafun.com for more information.'
-            , (response) =>
-              @debug response
-            , (response) =>
-              @debug response
+              facebookConnectPlugin.showDialog
+                method: 'feed'
+                link: 'http://larvafun.com'
+                picture: url
+                name: name + ' survived for ' + @GUIClock.getSeconds() + ' seconds.' #'Test Post'
+                caption: 'Posted from the LarvaGame.'
+                description: 'Visit http://larvafun.com for more information.'
+              , (response) =>
+                @debug response
+              , (response) =>
+                @debug response
+
       else
         facebookConnectPlugin.login ["public_profile"], (response) =>
           @debug response

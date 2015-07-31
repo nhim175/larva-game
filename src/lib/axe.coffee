@@ -28,12 +28,7 @@ class Axe extends Module
     @pickupSound.play()
 
     if window.plugins?.NativeAudio
-      window.plugins.NativeAudio.play('pickup'
-        , (success) ->
-          console.log(success)
-        , (error) ->
-          console.log(error)
-      )
+      window.plugins.NativeAudio.play 'pickup'
       
     @me.body.gravity.set 0, 0
     @flyTween = @game.tweens.create(@me).to {x: x, y: y }, 1000, Phaser.Easing.Cubic.Out
