@@ -47,8 +47,9 @@ class MenuState extends Module
 
     @debug @startBtn
 
-    @introAudio = @game.add.audio 'intro', 1, true
-    @introAudio.play '', 0, 0.5, true
+    unless /(ipod|iphone|ipad|android)/i.test(navigator.userAgent)
+      @introAudio = @game.add.audio 'intro', 1, true
+      @introAudio.play '', 0, 0.5, true
 
     if window.plugins?.NativeAudio
       window.plugins.NativeAudio.loop('intro')
