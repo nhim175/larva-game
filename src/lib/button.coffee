@@ -6,11 +6,13 @@ config = require './config.coffee'
 class Button extends Phaser.Button
   constructor: (game, x, y, key, callback) ->
     super(game, x, y, key, callback)
-    @onDownSound = new Phaser.Sound game, 'click', 1
+    @clickSound = new Phaser.Sound game, 'click', 1
     @onInputUp.add @onInputUpListener
     
   onInputUpListener: =>
     if window.plugins?.NativeAudio
       window.plugins.NativeAudio.play('click')
+    else
+      @clickSound.play()
 
 module.exports = Button

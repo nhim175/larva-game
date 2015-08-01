@@ -66,7 +66,7 @@ init = ->
         admob.createBannerView(publisherId: admobid.banner)
         document.addEventListener admob.events.onAdLoaded, -> makeGame()
 
-  if navigator.connection?.type is 'none'
+  if navigator.connection?.type is 'none' or navigator.connection?.type is 'unknown'
     makeGame()
   else
     ((d, s, id) ->
