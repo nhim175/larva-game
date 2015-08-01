@@ -193,17 +193,19 @@ class PlayState extends Module
               @debug data
               url = 'http://larvafun.com/' + data.url
 
-              facebookConnectPlugin.showDialog
+              dialogOptions =
                 method: 'feed'
                 link: 'http://larvafun.com'
                 picture: url
                 name: name + ' survived for ' + @GUIClock.getSeconds() + ' seconds.' #'Test Post'
                 caption: 'Posted from the LarvaGame.'
                 description: 'Visit http://larvafun.com for more information.'
-              , (response) =>
-                @debug response
-              , (response) =>
-                @debug response
+
+              try 
+                facebookConnectPlugin.showDialog dialogOptions
+              catch error
+                FB.ui dialogOptions
+
 
       else
         facebookConnectPlugin.login ["public_profile"], (response) =>
